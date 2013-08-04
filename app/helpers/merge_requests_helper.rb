@@ -31,7 +31,11 @@ module MergeRequestsHelper
   end
 
   def ci_build_details_path merge_request
-    merge_request.source_project.gitlab_ci_service.build_page(merge_request.last_commit.sha)
+    if merge_request.source_project.gitlab_ci?
+      merge_request.source_project.gitlab_ci_service.build_page(merge_request.last_commit.sha)
+    else
+      merge_request.source_project.jenkins_service.build_page(merge_request.last_commit.sha)
+    end
   end
 
   def merge_path_description(merge_request, separator)

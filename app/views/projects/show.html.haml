@@ -45,3 +45,7 @@
         = link_to @project.gitlab_ci_service.builds_path do
           = image_tag @project.gitlab_ci_service.status_img_path, alt: "build status"
 
+      - if @project.jenkins?
+        %hr
+        = link_to @project.jenkins_service.builds_path do
+          = image_tag @project.jenkins_service.status_img_path, alt: "build status"

@@ -116,9 +116,16 @@ class Projects::MergeRequestsController < Projects::ApplicationController
   end
 
   def ci_status
-    status = project.gitlab_ci_service.commit_status(merge_request.last_commit.sha)
-    response = {status: status}
-
+    status = ""
+    url = ""
+    source_project = merge_request.source_project
+    if source_project.gitlab_ci?
+      status = source_project.gitlab_ci_service.commit_status(merge_request.last_commit.sha)
+    end
+    if source_project.jenkins?
+      status, url = source_project.jenkins_service.commit_status(merge_request.last_commit.sha)
+    end
+    response = { status: status, url: url }
     render json: response
   end
 

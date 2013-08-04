@@ -44,6 +44,8 @@ class MergeRequest
     if @opts.ci_enable
       $.get @opts.url_to_ci_check, (data) =>
         this.showCiState data.status
+        if data.url
+          $('.ci_widget.ci-' + data.status + ' a').attr('href', data.url)
       , 'json'
 
   bindEvents: ->
